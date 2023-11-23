@@ -1,0 +1,45 @@
+﻿@using Social.NetWork.Dominio;
+@model IEnumerable<Post>;
+@if (!String.IsNullOrEmpty(ViewBag.Mensaje))
+{
+    <div class="alert alert-danger">
+        @ViewBag.Mensaje
+    </div>
+}
+
+<h1 id="h1Publicaciones">Publicaciones encontradas: </h1>
+@foreach (Post unPost in Model)
+{
+    int idPost = unPost.id;
+    string imagen = unPost.imagen;
+    string autor = unPost.autor.nombre;
+    string contenido = unPost.GetContenido();
+    string titulo = unPost.GetTitulo();
+    string fechaPublicacion = unPost.fecha.ToString("yyyy-MM-dd HH:mm:ss");
+
+    <div class="card mb-4" style="max-width: 500px; height: auto;">
+        <img class="img-thumbnail card-img-top" src="~/imagenes/fotos/@unPost.imagen" style="max-width: 500px; height: auto; text-align: center;" />
+        <div class="card-body">
+            <h5 class="card-title" style="text-align: center;">@titulo</h5>
+            <p class="card-text">@contenido</p>
+            <p class="card-text"><small class="text-muted">@fechaPublicacion</small></p>
+            <p class="card-text"><small class="text-muted">@unPost.valorDeAceptacion</small></p>
+        </div>
+        <div class="card-body divScroll">
+            @foreach (Comentario comentario in unPost.GetComentarios())
+            {
+                string autorComentario = comentario.autor.nombre;
+                string tituloComentario = comentario.GetTitulo();
+                string contenidoComentario = comentario.GetContenido();
+                string fechaComentario = comentario.fecha.ToString("yyyy-MM-dd HH:mm:ss");
+
+                <br>
+                <h5 class="card-text">Usuario: @autorComentario</h5>
+                <h5 class="card-text">Titulo: @tituloComentario</h5>
+                <p class="card-text"><small class="text-muted">Fecha: @fechaComentario</small></p>
+                <p class="card-text">Comentario: @contenidoComentario</p>
+                <hr>
+            }
+        </div>
+    </div>
+}
